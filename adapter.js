@@ -1,4 +1,4 @@
-const { Requester, Validator } = require("@chainlink/external-adapter");
+const { Requester, Validator } = require("@chainlink/external-adapter"); //Install this dependency npm i @chainlink/external-adapter
 
 const customError = (data) => {
   if (data.Response === "Error") return true;
@@ -15,7 +15,7 @@ const createRequest = (input, callback) => {
   const jobRunID = validator.validated.id;
   const name = validator.validated.data.username;
   const headers = {
-    "Authorization": "3b3a14c1-8a917b2d-b576f05e-6dcc6d9a",
+    "Authorization": "API-KEY",
   };
 
   const url = `https://fortniteapi.io/v1/lookup?username=${name}`;

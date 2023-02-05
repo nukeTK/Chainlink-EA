@@ -1,7 +1,7 @@
 type = "directrequest"
 schemaVersion = 1
 name = "playerid-EA"
-contractAddress = "0xA18Ee9D2AC8A72463fEd5C020C3ada6E5b7d5771"
+contractAddress = "0xA18Ee9D2AC8A72463fEd5C020C3ada6E5b7d5771" //Oracle Contract Address or Operator Contract address
 maxTaskDuration = "0s"
 observationSource = """
     decode_log   [type=ethabidecodelog
@@ -10,13 +10,18 @@ observationSource = """
                   topics="$(jobRun.logTopics)"]
 
     decode_cbor  [type=cborparse data="$(decode_log.data)"]
+                //bridge name should be same as the bridge you have created in the chainlink node 
+                //In fetch section just mention the data you need to fetch with proper argument name 
     fetch        [type=bridge name="chainlink" requestData="{\\"id\\": $(jobSpec.externalJobID), \\"data\\": { \\"name\\": $(decode_cbor.name)}}"]
+                //In parse section under path, mention the data need to fetch from upcoming request with commas
     parse        [type=jsonparse path="data,account_id" data="$(fetch)"]
+                //In encode_data section you need to specify the abi according to your function that you have created in the cosumer contract 
+                //make sure the argument type should be same as the contract 
     encode_data  [type=ethabiencode abi="(bytes32 requestId,string info)" data="{\\"requestId\\": $(decode_log.requestId),\\"info\\": $(parse) }"]
     encode_tx    [type=ethabiencode
                   abi="fulfillOracleRequest2(bytes32 requestId, uint256 payment, address callbackAddress, bytes4 callbackFunctionId, uint256 expiration, bytes calldata data)"
                   data="{\\"requestId\\": $(decode_log.requestId), \\"payment\\": $(decode_log.payment), \\"callbackAddress\\": $(decode_log.callbackAddr), \\"callbackFunctionId\\": $(decode_log.callbackFunctionId), \\"expiration\\": $(decode_log.cancelExpiration), \\"data\\": $(encode_data)}"]
-    
+                //In submit_tx section, enter the same oracle or opertor address  
     submit_tx    [type=ethtx to="0xA18Ee9D2AC8A72463fEd5C020C3ada6E5b7d5771" data="$(encode_tx)"]
 
     decode_log -> decode_cbor -> fetch -> parse -> encode_data -> encode_tx -> submit_tx

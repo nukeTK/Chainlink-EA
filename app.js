@@ -1,7 +1,7 @@
 const express = require("express");
 const app = express();
 const cors = require("cors");
-const createRequest = require("./adapter.js").createRequest;
+const createRequest = require("./adapter.js").createRequest; 
 const bodyparser = require("body-parser");
 
 app.use(cors());
