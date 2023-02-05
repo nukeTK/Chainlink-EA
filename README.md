@@ -1,6 +1,7 @@
 ## Guide to Build an External Adapter that bridges to a Chainlink Oracle Node so that your smart contracts can fetch arbitrary data from an external API.
 
 ### IMPORTANT FLOW DIAGRAM
+![architecture](https://user-images.githubusercontent.com/106370886/216809759-ffa03512-0ac1-4270-84a8-1315f15114a5.png)
 
 ## FOLLOW THESE STEPS
 
